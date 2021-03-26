@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
-import { Input,Button, List } from 'antd';
-import './TodoLists.css'
 import store from './store'
+// import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './actionTypes'
+import {getInputChangeAction, getAddItemAction, getDeleteAction, initListAction} from './store/actionCreators'
+import TodoListUI from "./TodoListUI";
+import axios from 'axios'
 
 
 class TodoLists extends Component {
@@ -12,39 +14,36 @@ class TodoLists extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleBtnClick = this.handleBtnClick.bind(this)
     this.handleStoreChange = this.handleStoreChange.bind(this)
-
+    this.handleItemDelete = this.handleItemDelete.bind(this)
   }
 
   render() {
     return (
-        <div style={{marginTop: "10px", marginLeft: "10px"}}>
-          <div>
-            <Input onChange={this.handleInputChange} value={this.state.inputValue} placeholder="hello antd" style={{width: "300px", marginRight: "10px"}}/>
-            <Button type="primary" onClick={this.handleBtnClick}>提交</Button>
-          </div>
-          <List
-              style={{width: "300px", marginTop: "10px"}}
-              bordered
-              dataSource={this.state.list}
-              renderItem={item => (
-                  <List.Item>
-                    {item}
-                  </List.Item>
-              )}
-          />
-        </div>
+        <TodoListUI
+            inputValue={this.state.inputValue}
+            handleInputChange={this.handleInputChange}
+            handleBtnClick={this.handleBtnClick}
+            list={this.state.list}
+            handleItemDelete={this.handleItemDelete}
+        />
     )
   }
 
   componentDidMount() {
+    axios.get("/api/todolist").then((res) => {
+      const data = res.data
+      const action = initListAction(data)
+      store.dispatch(action)
+    })
     store.subscribe(this.handleStoreChange)
   }
 
   handleInputChange(e) {
-    const action = {
-      type: "change_input_value",
+    /*const action = {
+      type: CHANGE_INPUT_VALUE,
       value: e.target.value
-    }
+    }*/
+    const action = getInputChangeAction(e.target.value)
     store.dispatch(action)
   }
 
@@ -53,9 +52,19 @@ class TodoLists extends Component {
   }
 
   handleBtnClick() {
-    const action = {
-      type: 'add_todo_item'
-    }
+    /*const action = {
+      type: ADD_TODO_ITEM
+    }*/
+    const action = getAddItemAction()
+    store.dispatch(action)
+  }
+
+  handleItemDelete(index) {
+    /*const action = {
+      type: DELETE_TODO_ITEM,
+      index: index
+    }*/
+    const action = getDeleteAction(index)
     store.dispatch(action)
   }
 }
