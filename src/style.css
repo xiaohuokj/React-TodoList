@@ -1,3 +1,77 @@
 .input {
     border: 1px solid red;
 }
+
+.itemWrapper {
+    width: 300px;
+    height: auto;
+    border: 1px solid black;
+}
+
+.item {
+    display: flex;
+    width: 300px;
+    justify-content: center;
+}
+
+
+.show {
+    opacity: 1;
+    /*transition: all 1s ease-in;*/
+    animation: show-item 2s ease-in forwards;
+}
+
+.hide {
+    opacity: 0;
+    /*transition: all 1s ease-in;*/
+    animation: hide-item 2s ease-in forwards;
+}
+
+@keyframes hide-item {
+    0% {
+        opacity: 1;
+        color: red;
+    }
+    50% {
+        opacity: 0.5;
+        color: green;
+    }
+    100% {
+        opacity: 0;
+        color: blue;
+    }
+}
+
+@keyframes show-item {
+    0% {
+        opacity: 0;
+        color: red;
+    }
+    50% {
+        opacity: 0.5;
+        color: green;
+    }
+    100% {
+        opacity: 1;
+        color: blue;
+    }
+}
+
+
+.alert-enter {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.alert-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+}
+.alert-exit {
+    opacity: 1;
+}
+.alert-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+}
