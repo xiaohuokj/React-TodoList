@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import store from './store'
 // import {CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM} from './actionTypes'
-import {getInputChangeAction, getAddItemAction, getDeleteAction, initListAction} from './store/actionCreators'
+// 使用 redux-thunk 时发请求 getTodoList
+// 使用redux-saga 时发请求 getInitList
+import {getInitList, getInputChangeAction, getAddItemAction, getDeleteAction} from './store/actionCreators'
 import TodoListUI from "./TodoListUI";
-import axios from 'axios'
 
 
 class TodoLists extends Component {
@@ -30,11 +31,19 @@ class TodoLists extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/todolist").then((res) => {
+    // 不使用中间件时 发送请求
+    /*axios.get("/api/todolist").then((res) => {
       const data = res.data
       const action = initListAction(data)
       store.dispatch(action)
-    })
+    })*/
+    //  使用 redux-thunk 并 发送请求
+   /* const action = getTodoList()
+    store.dispatch(action)*/
+    // 使用redux-saga 时发请求
+    const action = getInitList();
+    store.dispatch(action)
+    // store 更新数据
     store.subscribe(this.handleStoreChange)
   }
 

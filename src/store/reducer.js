@@ -5,6 +5,7 @@ const defaultState = {
   list: []
 }
 
+//eslint-disable-next-line
 export default (state = defaultState, action) => {
   if (action.type === CHANGE_INPUT_VALUE) {
     const newState = JSON.parse(JSON.stringify(state));
